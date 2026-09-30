@@ -83,14 +83,13 @@ async def create_user(user: UserCreate):
 
 
 @router.put("/users/{user_id}")
-async def update_usetr(user_id: int, user: UserCreate):
+async def update_user(user_id: int, user: UserCreate):
     for u in users_db:
         if u.id == user_id:
             u.name = user.name
             u.email = user.email
-        elif u.id == user.id and u.id != user_id:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="El ID del usuario ya existe"
-            )
             return {"message": "Usuario actualizado exitosamente", "user": u}
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="Usuario no encontrado"
+    )
